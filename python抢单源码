@@ -1,0 +1,52 @@
+from selenium import webdriver
+import time
+import datetime
+now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+
+f = input("请选择登录方式，0为提前输入密码，其余为自己在运行过程中输入密码,20s内完成输入自己的账号密码")
+if f == '0':
+    zhanghu = input("请输入账号")
+    mima = input("请输入密码")
+
+wangzhi = input("请输入目标网址")
+
+# 打开Chrome浏览器
+browser = webdriver.Chrome(r"C:\Users\86131\Desktop\唉\chromedriver.exe")
+browser.get("https://www.taobao.com")
+time.sleep(2)
+browser.find_element_by_link_text("亲，请登录").click()
+time.sleep(2)
+
+if f == '0':
+    # 登录账户<input name="fm-login-id" type="text" class="fm-text" id="fm-login-id" tabindex="1" aria-label="会员名/邮箱/手机号" placeholder="会员名/邮箱/手机号" autocapitalize="off">
+    # 登录密码 <input name="fm-login-password" type="password" class="fm-text" id="fm-login-password" tabindex="2" aria-label="请输入登录密码" placeholder="请输入登录密码" maxlength="40" autocapitalize="off">
+    # 确认 <button type="submit" tabindex="3" class="fm-button fm-submit password-login">登录</button>
+    browser.find_element_by_xpath("//input[@placeholder='会员名/邮箱/手机号']").send_keys (zhanghu)
+    browser.find_element_by_xpath("//input[@placeholder='请输入登录密码']").send_keys (mima)
+    browser.find_element_by_xpath("//button[@class='fm-button fm-submit password-login']").click()
+    time.sleep(2)
+else:
+    time.sleep(20)
+
+# 输入目标商品的网址：
+browser.get(wangzhi)
+
+while True:
+    # 点击购买按钮
+    try:
+        browser.find_element_by_id("J_LinkBuy").click()
+        break
+    except:
+        print("时间未到")
+
+# 点击提交订单按钮
+while True:
+    try:
+        browser.find_element_by_link_text('提交订单').click()
+        print("抢购成功，请尽快付款")
+        time.sleep(100000000000)
+    except:
+        print("再次尝试提交订单")
+        time.sleep(0.01)
+
+
